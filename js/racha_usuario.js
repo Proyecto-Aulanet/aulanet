@@ -9,7 +9,7 @@ async function cargarRacha() {
 
         const respuesta =
             await fetch(
-                "/castoresmlaulanet/php/obtener_racha.php"
+                "/aulanet/php/obtener_racha.php"
             );
 
 
