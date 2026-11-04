@@ -2,9 +2,9 @@
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 $host = "localhost";
-$db = "aulanet";
-$user = "aulanetdb";
-$pass = "PcMaBd*08072026";
+$db = "aulanet_pruebas";
+$user = "aulanet_local";
+$pass = "UnaNuevaClaveLocal2026!";
 
 try {
     $pdo = new PDO(
