@@ -268,76 +268,59 @@ async function cargarPerfil(){
 
 function activarEdicion(){
 
-
     Swal.fire({
+        title: "Editar información",
+        text: "¿Deseas modificar tus datos?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Sí, editar",
+        cancelButtonText: "Cancelar"
 
-        title:"Editar información",
-
-        text:"¿Deseas modificar tus datos?",
-
-        icon:"question",
-
-        showCancelButton:true,
-
-        confirmButtonText:"Sí, editar"
-
-
-    }).then((resultado)=>{
-
+    }).then((resultado) => {
 
         if(resultado.isConfirmed){
 
-
-            let campos=[
-
+            let campos = [
                 "txtNombre",
                 "txtApellido",
                 "txtUsuario",
-                "txtCorreo"
-
+                "txtCorreo",
+                "txtPassword"
             ];
 
+            campos.forEach(id => {
 
-
-            campos.forEach(id=>{
-
-
-                const campo =
-                document.getElementById(id);
-
-
+                const campo = document.getElementById(id);
 
                 if(campo){
-
-                    campo.disabled=false;
-
+                    campo.disabled = false;
                 }
-
 
             });
 
+            const botonPassword = document.getElementById("btnTogglePassword");
 
-
-            const panel =
-            document.getElementById("panelGuardar");
-
-
-            if(panel){
-
-                panel.classList.remove("d-none");
-
+            if(botonPassword){
+                botonPassword.disabled = false;
             }
 
+            const password = document.getElementById("txtPassword");
+
+            if(password){
+                password.placeholder = "Escribe una nueva contraseña (opcional)";
+            }
+
+            const panel = document.getElementById("panelGuardar");
+
+            if(panel){
+                panel.classList.remove("d-none");
+            }
 
         }
 
-
     });
 
-
 }
-
-
 
 
 
@@ -347,91 +330,122 @@ function activarEdicion(){
 
 async function guardarPerfil(){
 
+    let apellido = document.getElementById("txtApellido").value.split(" ");
 
-    let apellido =
-    document.getElementById("txtApellido")
-    .value.split(" ");
+    let password = document.getElementById("txtPassword").value;
 
+    let datos = {
 
-
-    let datos={
-
-
-        accion:"modificar",
-
+        accion: "modificar",
         idusuario: idUsuarioActual,
 
+        nombre: document.getElementById("txtNombre").value,
+        apellidop: apellido[0],
+        apellidom: apellido[1] || "",
 
-        nombre:
-        document.getElementById("txtNombre").value,
-
-
-        apellidop:
-        apellido[0],
-
-
-        apellidom:
-        apellido[1] || "",
-
-
-        username:
-        document.getElementById("txtUsuario").value,
-
-
-        email:
-        document.getElementById("txtCorreo").value
-
+        username: document.getElementById("txtUsuario").value,
+        email: document.getElementById("txtCorreo").value
 
     };
 
+    // Solo enviar contraseña si se escribió una nueva
+    if(password.trim() !== ""){
 
+        if(password.length < 8){
 
-    const respuesta =
-    await fetch("../php/registro_process.php",
-    {
+            Swal.fire(
+                "Contraseña no válida",
+                "La nueva contraseña debe tener al menos 8 caracteres.",
+                "warning"
+            );
 
-        method:"POST",
+            return;
 
-        headers:{
+        }
 
-            "Content-Type":"application/json"
-
-        },
-
-        body:
-        JSON.stringify(datos)
-
-    });
-
-
-
-    const resultado =
-    await respuesta.json();
-
-
-
-    console.log(resultado);
-
-
-
-    if(resultado.status==="success"){
-
-
-        Swal.fire(
-            "Actualizado",
-            "Datos modificados correctamente",
-            "success"
-        );
-
-
-        cargarPerfil();
-
+        datos.password = password;
 
     }
 
+    try{
+
+        const respuesta = await fetch("../php/registro_process.php", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify(datos)
+
+        });
+
+        const resultado = await respuesta.json();
+
+        console.log("Respuesta del servidor:", resultado);
+
+        if(resultado.status === "success"){
+
+            Swal.fire(
+                "Actualizado",
+                "Tus datos se actualizaron correctamente.",
+                "success"
+            );
+
+            // Limpiar el campo de contraseña
+            const campoPassword = document.getElementById("txtPassword");
+
+            campoPassword.value = "";
+            campoPassword.type = "password";
+
+            document.getElementById("iconoPassword").classList.remove("bi-eye-slash-fill");
+            document.getElementById("iconoPassword").classList.add("bi-eye-fill");
+
+            // Volver a bloquear los campos
+            let campos = [
+                "txtNombre",
+                "txtApellido",
+                "txtUsuario",
+                "txtCorreo",
+                "txtPassword"
+            ];
+
+            campos.forEach(id => {
+
+                document.getElementById(id).disabled = true;
+
+            });
+
+            document.getElementById("btnTogglePassword").disabled = true;
+
+            document.getElementById("panelGuardar").classList.add("d-none");
+
+            cargarPerfil();
+
+        }else{
+
+            Swal.fire(
+                "Error",
+                resultado.message || "No se pudieron actualizar los datos.",
+                "error"
+            );
+
+        }
+
+    }catch(error){
+
+        console.error("Error actualizando perfil:", error);
+
+        Swal.fire(
+            "Error",
+            "No fue posible comunicarse con el servidor.",
+            "error"
+        );
+
+    }
 
 }
-
 
 
 
@@ -658,17 +672,30 @@ async function guardarIcono(){
 
 }
 
+function toggleMostrarPassword() {
+
+    const password = document.getElementById("txtPassword");
+    const icono = document.getElementById("iconoPassword");
+
+    if (!password || !icono) return;
+
+    if (password.type === "password") {
+
+        password.type = "text";
+
+        icono.classList.remove("bi-eye-fill");
+        icono.classList.add("bi-eye-slash-fill");
+
+    } else {
+
+        password.type = "password";
+
+        icono.classList.remove("bi-eye-slash-fill");
+        icono.classList.add("bi-eye-fill");
+
+    }
+
+}
 
 
-document.getElementById('btnEditar').addEventListener('click', () => {
-    document.getElementById('txtNombre').removeAttribute('disabled');
-    document.getElementById('txtApellido').removeAttribute('disabled');
-    document.getElementById('txtUsuario').removeAttribute('disabled');
-    document.getElementById('txtCorreo').removeAttribute('disabled');
-    
-    // Habilitar contraseña y botón de visualización
-    document.getElementById('txtPassword').removeAttribute('disabled');
-    document.getElementById('btnTogglePassword').removeAttribute('disabled');
-    
-    document.getElementById('panelGuardar').classList.remove('d-none');
-});
+

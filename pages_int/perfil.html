@@ -485,10 +485,23 @@
 
                                 <div class="input-group">
 
-                                    <input id="txtPassword" type="password" class="form-control" value="****" disabled>
+                                    <input
+                                        id="txtPassword"
+                                        type="password"
+                                        class="form-control"
+                                        value=""
+                                        placeholder="Contraseña protegida"
+                                        disabled
+                                        autocomplete="new-password"
+                                    >
 
-                                    <button id="btnTogglePassword" class="btn btn-outline-light" type="button"
-                                        onclick="toggleMostrarPassword()" disabled>
+                                    <button
+                                        id="btnTogglePassword"
+                                        class="btn btn-outline-light"
+                                        type="button"
+                                        onclick="toggleMostrarPassword()"
+                                        disabled
+                                    >
 
                                         <i id="iconoPassword" class="bi bi-eye-fill"></i>
 
