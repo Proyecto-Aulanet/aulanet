@@ -84,9 +84,9 @@ function presenCambiarModo(modo) {
     // Obtener todos los elementos
     // que tengan traducciones
     const elementos =
-        document.querySelectorAll(
-            "[data-es]"
-        );
+    document.querySelectorAll(
+        "[data-es]:not(#nombreUsuario)"
+    );
 
     // Recorrer elementos
     elementos.forEach(el => {
@@ -872,7 +872,7 @@ document
 
             const id = nivel.dataset.id;
 
-            console.log("Nivel:", id);
+    
 
             // Aquí rediriges
             // window.location.href = "nivel" + id + ".html";

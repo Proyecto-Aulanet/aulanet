@@ -1,18 +1,37 @@
+
+// =====================================
+// DETECTAR RUTA BASE DEL PROYECTO
+// =====================================
+
+const rutaScriptUsuario = document.currentScript.src;
+
+const RUTA_BASE = new URL("../", rutaScriptUsuario);
+
+function obtenerRuta(archivo) {
+    return new URL(archivo, RUTA_BASE).href;
+}
+
+
+// =====================================
+// CARGAR INFORMACIÓN DEL USUARIO
+// =====================================
+
 document.addEventListener("DOMContentLoaded", function () {
 
-    console.log("🔄 usuarioHeader.js cargado");
+
+
+
 
     // ================================
-    // OBTENER INFORMACIÓN DEL USUARIO
+    // SESIÓN DEL USUARIO
     // ================================
 
-    fetch("/Castoresmlaulanet/php/sesion_usuario.php", {
+    fetch(obtenerRuta("php/sesion_usuario.php"), {
         method: "GET",
         credentials: "include",
         cache: "no-store"
     })
         .then(response => {
-
             if (!response.ok) {
                 throw new Error("Error HTTP: " + response.status);
             }
@@ -21,17 +40,35 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then(data => {
 
-            console.log("👤 Datos de sesión:", data);
 
-            if (data.status !== "success" || !data.usuario) {
 
-                console.warn("⚠️ No hay sesión activa");
+            const nombreHeader =
+                document.getElementById("nombreUsuario");
 
-                const nombreHeader =
-                    document.getElementById("nombreUsuario");
+            const nombreBienvenida =
+                document.getElementById("nombreUsuarioBienvenida");
 
-                const nombreBienvenida =
-                    document.getElementById("nombreUsuarioBienvenida");
+            if (data.status === "success" && data.usuario) {
+
+                const nombre =
+                    data.usuario.nombre?.trim() || "Usuario";
+
+                if (nombreHeader) {
+                    nombreHeader.textContent = nombre;
+                }
+
+                if (nombreBienvenida) {
+                    nombreBienvenida.textContent = nombre;
+                }
+
+                if (data.usuario.idusuario) {
+                    localStorage.setItem(
+                        "idusuario",
+                        data.usuario.idusuario
+                    );
+                }
+
+            } else {
 
                 if (nombreHeader) {
                     nombreHeader.textContent = "Invitado";
@@ -40,69 +77,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (nombreBienvenida) {
                     nombreBienvenida.textContent = "Invitado";
                 }
-
-                return;
-            }
-
-            const usuario = data.usuario;
-
-            // ================================
-            // NOMBRE DEL USUARIO
-            // ================================
-
-            const nombre =
-                usuario.nombre?.trim() || "Usuario";
-
-            const nombreHeader =
-                document.getElementById("nombreUsuario");
-
-            const nombreBienvenida =
-                document.getElementById("nombreUsuarioBienvenida");
-
-            if (nombreHeader) {
-                nombreHeader.textContent = nombre;
-            }
-
-            if (nombreBienvenida) {
-                nombreBienvenida.textContent = nombre;
-            }
-
-            // ================================
-            // GUARDAR ID
-            // ================================
-
-            if (usuario.idusuario) {
-
-                localStorage.setItem(
-                    "idusuario",
-                    usuario.idusuario
-                );
-
             }
 
         })
         .catch(error => {
-
-            console.error(
-                "❌ Error al obtener el usuario:",
-                error
-            );
-
-            const nombreBienvenida =
-                document.getElementById("nombreUsuarioBienvenida");
-
-            if (nombreBienvenida) {
-                nombreBienvenida.textContent = "Usuario";
-            }
-
+            console.error("Error al obtener el usuario:", error);
         });
 
 
     // ================================
-    // OBTENER FOTO DEL USUARIO
+    // FOTO DEL USUARIO
     // ================================
 
-    fetch("/Castoresmlaulanet/php/foto_usuario.php", {
+    fetch(obtenerRuta("php/foto_usuario.php"), {
         method: "GET",
         credentials: "include",
         cache: "no-store"
@@ -122,53 +109,38 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 let rutaFoto = data.foto;
 
-                rutaFoto =
-                    rutaFoto.replace(/^(\.\.\/)+/, "");
+                rutaFoto = rutaFoto.replace(/^(\.\.\/)+/, "");
 
-                if (!rutaFoto.startsWith("/Castoresmlaulanet/")) {
-
-                    rutaFoto =
-                        "/Castoresmlaulanet/" + rutaFoto;
-
+                if (!rutaFoto.startsWith("/")) {
+                    rutaFoto = "/" + rutaFoto;
                 }
 
-                console.log(
-                    "📷 Ruta final:",
-                    rutaFoto
-                );
-
-                foto.src = rutaFoto;
+                // Construir ruta de la imagen desde la raíz
+                foto.src = obtenerRuta(rutaFoto.replace(/^\/+/, ""));
 
                 foto.style.display = "block";
 
                 if (icono) {
                     icono.style.display = "none";
                 }
-
             }
 
         })
-        .catch(error =>
-            console.error(
-                "❌ Error al obtener la foto:",
-                error
-            )
-        );
+        .catch(error => {
+            console.error("Error al obtener la foto:", error);
+        });
 
 
     // ================================
-    // OBTENER RACHA
+    // RACHA DEL USUARIO
     // ================================
 
     function cargarRacha() {
 
-        fetch(
-            "/Castoresmlaulanet/php/obtener_racha.php",
-            {
-                credentials: "include",
-                cache: "no-store"
-            }
-        )
+        fetch(obtenerRuta("php/obtener_racha.php"), {
+            credentials: "include",
+            cache: "no-store"
+        })
             .then(response => response.json())
             .then(data => {
 
@@ -178,19 +150,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     document.getElementById("streak-display");
 
                 if (streakDisplay) {
-
-                    streakDisplay.textContent =
-                        data.racha || 0;
-
+                    streakDisplay.textContent = data.racha || 0;
                 }
 
             })
-            .catch(error =>
-                console.error(
-                    "❌ Error al obtener la racha:",
-                    error
-                )
-            );
+            .catch(error => {
+                console.error("Error al obtener la racha:", error);
+            });
     }
 
     cargarRacha();

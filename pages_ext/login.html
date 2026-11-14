@@ -232,38 +232,12 @@
                                     <!-- APELLIDO PATERNO (Corregido id a apellidop) -->
                                     <div class="col-md-6" data-aos="fade-up">
                                         <label class="form-label">
-                                            <span data-es="Apellido paterno" data-na="Tetah itoka">
-                                                Apellido paterno
+                                            <span data-es="Apellido" data-na="Tetah">
+                                                Apellido
                                             </span>
                                         </label>
                                         <input type="text" id="apellidop" class="form-control rounded-3 text-uppercase"
                                             pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+" required>
-                                    </div>
-
-                                    <!-- APELLIDO MATERNO (Corregido id a apellidom) -->
-                                    <div class="col-md-6" data-aos="fade-up">
-                                        <label class="form-label">
-                                            <span data-es="Apellido materno" data-na="Tenan itoka">
-                                                Apellido materno
-                                            </span>
-                                        </label>
-                                        <input type="text" id="apellidom" class="form-control rounded-3 text-uppercase"
-                                            pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+" required>
-                                    </div>
-
-                                    <!-- FECHA NACIMIENTO (Agregado id="fechaNac") -->
-                                    <div class="col-md-6" data-aos="fade-up">
-                                        <label class="form-label">
-                                            <span data-es="Fecha de nacimiento" data-na="Tonali tlen otlakat">
-                                                Fecha de nacimiento
-                                            </span>
-                                        </label>
-                                        <input type="date" 
-                                            id="fechaNac" 
-                                            class="form-control rounded-3" 
-                                            min="1900-01-01"
-                                            max="2026-12-31"
-                                            required>
                                     </div>
 
                                     <!-- USERNAME -->
@@ -324,21 +298,21 @@
                                         </label>
                                         <input type="email" id="email" class="form-control rounded-3" required>
                                     </div>
+                                    
+<!-- CONTRASEÑA -->
+<div class="col-md-6" data-aos="fade-up">
+    <label class="form-label">
+        <span data-es="Contraseña" data-na="Tlatzakuilli">
+            Contraseña
+        </span>
+    </label>
 
-                                    <!-- CONTRASEÑA -->
-                                    <div class="col-md-6" data-aos="fade-up">
-                                        <label class="form-label">
-                                            <span data-es="Contraseña" data-na="Tlatzakuilli">
-                                                Contraseña
-                                            </span>
-                                        </label>
-                                        <div class="input-group">
+    <div class="input-group">
 
     <input
         type="password"
         id="password"
         class="form-control rounded-start-3"
-        minlength="8"
         required
     >
 
@@ -351,7 +325,12 @@
     </button>
 
 </div>
-                                    </div>
+
+<small id="mensajeSeguridad"
+    class="d-none mt-2">
+</small>
+</div>
+
 
                                     <!-- CONFIRMAR -->
                                     <div class="col-md-6" data-aos="fade-up">
@@ -366,7 +345,6 @@
         type="password"
         id="confirmPassword"
         class="form-control rounded-start-3"
-        minlength="8"
         required
     >
 

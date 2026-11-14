@@ -1,4 +1,4 @@
-console.log("✅ examenes_realizados.js cargado");
+
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -15,7 +15,7 @@ async function cargarExamenesRealizados() {
 
     try {
 
-        console.log("📚 Consultando exámenes realizados...");
+
 
         const respuesta = await fetch(
             "../php/obtener_examenes_realizados.php",
@@ -37,10 +37,7 @@ async function cargarExamenesRealizados() {
 
         const datos = await respuesta.json();
 
-        console.log(
-            "📊 Exámenes realizados:",
-            datos
-        );
+
 
 
         if (datos.status !== "success") {
@@ -77,11 +74,7 @@ async function cargarExamenesRealizados() {
 
 function marcarExamenesRealizados(examenes) {
 
-    console.log(
-        "🔎 Procesando",
-        examenes.length,
-        "exámenes."
-    );
+
 
 
     /*
@@ -125,14 +118,7 @@ function marcarExamenesRealizados(examenes) {
             relacionMisionMedalla[idMision];
 
 
-        console.log(
-            "📝 Misión:",
-            idMision,
-            "→ Tarjeta:",
-            numeroTarjeta,
-            "→ Puntaje:",
-            puntaje
-        );
+
 
 
         if (!numeroTarjeta) {

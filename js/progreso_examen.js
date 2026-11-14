@@ -13,7 +13,7 @@ async function cargarExamenesRealizados() {
         const datos =
             await respuesta.json();
 
-        console.log("Exámenes:", datos);
+
 
         if (datos.status !== "success")
             return;

@@ -70,7 +70,7 @@ async function cargarRanking() {
         const resultado =
             await respuesta.json();
 
-        console.log("📊 Ranking recibido:", resultado);
+
 
         if (resultado.status !== 'success') {
 
@@ -182,10 +182,7 @@ async function cargarRankingModal() {
         const resultado =
             await respuesta.json();
 
-        console.log(
-            "🏆 Ranking completo:",
-            resultado
-        );
+
 
         if (resultado.status !== 'success') {
 
@@ -306,9 +303,7 @@ document.addEventListener(
     'DOMContentLoaded',
     function () {
 
-        console.log(
-            "🏆 Inicializando ranking..."
-        );
+
 
         // Cargar los 5 principales
         cargarRanking();
@@ -329,9 +324,7 @@ document.addEventListener(
                 'show.bs.modal',
                 function () {
 
-                    console.log(
-                        "🏆 Abriendo ranking completo..."
-                    );
+
 
                     cargarRankingModal();
 

@@ -3,7 +3,7 @@
 // PUNTOS.JS
 // =====================================================
 
-console.log("🚀 puntos.js CARGADO CORRECTAMENTE");
+
 
 
 // =====================================================
@@ -12,7 +12,7 @@ console.log("🚀 puntos.js CARGADO CORRECTAMENTE");
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    console.log("📄 DOM cargado");
+
 
     cargarPuntaje();
 
@@ -25,15 +25,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 async function cargarPuntaje() {
 
-    console.log("⭐ Iniciando carga del puntaje...");
 
 
-    const urlApi = "/Castoresmlaulanet/php/obtener_puntaje_total.php";
 
-    console.log(
-        "🌐 Consultando:",
-        urlApi
-    );
+    const urlApi = "/aulanet/php/obtener_puntaje_total.php";
+
+
 
 
     try {
@@ -48,10 +45,7 @@ async function cargarPuntaje() {
             );
 
 
-        console.log(
-            "📡 Respuesta HTTP:",
-            response.status
-        );
+
 
 
         if (!response.ok) {
@@ -67,10 +61,7 @@ async function cargarPuntaje() {
             await response.json();
 
 
-        console.log(
-            "📦 Datos recibidos:",
-            data
-        );
+
 
 
         if (
@@ -83,10 +74,7 @@ async function cargarPuntaje() {
                 ) || 0;
 
 
-            console.log(
-                "🏆 PUNTAJE TOTAL:",
-                puntaje
-            );
+
 
 
             actualizarPuntajeDOM(
@@ -122,10 +110,7 @@ async function cargarPuntaje() {
 
 function actualizarPuntajeDOM(puntaje) {
 
-    console.log(
-        "🎯 Actualizando puntaje en pantalla:",
-        puntaje
-    );
+
 
 
     // =================================================
@@ -143,9 +128,7 @@ function actualizarPuntajeDOM(puntaje) {
         xpUsuario.textContent =
             puntaje;
 
-        console.log(
-            "✅ #xpUsuario actualizado"
-        );
+
 
     } else {
 
@@ -171,9 +154,7 @@ function actualizarPuntajeDOM(puntaje) {
         xpDisplay.textContent =
             puntaje;
 
-        console.log(
-            "✅ #xp-display actualizado"
-        );
+
 
     } else {
 

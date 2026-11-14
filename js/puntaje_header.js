@@ -1,12 +1,12 @@
 (function() {
     'use strict';
-    console.log("🔄 puntaje_header.js ejecutando...");
+
 
     function cargarPuntajeHeader() {
-        fetch("/Castoresmlaulanet/php/obtener_puntaje_total.php")
+        fetch("/aulanet/php/obtener_puntaje_total.php")
             .then(response => response.json())
             .then(data => {
-                console.log("📊 Respuesta Header:", data);
+
 
                 if (data.status === "success") {
                     const puntajeFormateado = Number(data.puntaje_total).toLocaleString();
@@ -14,7 +14,7 @@
                     const xpDisplay = document.getElementById("xp-display");
                     if (xpDisplay) {
                         xpDisplay.textContent = puntajeFormateado;
-                        console.log("✅ Actualizado #xp-display en el header con:", puntajeFormateado);
+
                     } else {
                         console.warn("⚠️ No se encontró el elemento #xp-display en el HTML");
                     }

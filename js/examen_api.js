@@ -1,4 +1,4 @@
-console.log("Examen API cargado");
+
 
 let preguntas = [];
 let indiceActual = 0;
@@ -23,10 +23,7 @@ async function cargarExamen() {
         const idmision =
             parseInt(parametros.get("idmision"));
 
-        console.log(
-            "Misión recibida:",
-            idmision
-        );
+      
 
 
         if (!idmision || isNaN(idmision)) {
@@ -117,10 +114,7 @@ async function cargarExamen() {
             `../php/api_examen.php?idmision=${idmision}`;
 
 
-        console.log(
-            "Consultando API examen:",
-            url
-        );
+     
 
         const respuesta =
             await fetch(url);
@@ -136,10 +130,7 @@ async function cargarExamen() {
         const datos =
             await respuesta.json();
 
-        console.log(
-            "Respuesta API examen:",
-            datos
-        );
+       
 
         // =================================================
         // COMPROBAR RESPUESTA
@@ -165,10 +156,6 @@ async function cargarExamen() {
         preguntas =
             preguntas.slice(0, 10);
 
-        console.log(
-            "Preguntas recibidas:",
-            preguntas.length
-        );
 
         if (preguntas.length < 10) {
 
@@ -399,10 +386,7 @@ function siguientePregunta() {
         puntaje += 10;
     }
 
-    console.log(
-        "Puntaje:",
-        puntaje
-    );
+  
 
     // =================================================
     // SIGUIENTE
@@ -455,10 +439,7 @@ async function registrarExamenRealizado() {
             return false;
         }
 
-        console.log(
-            "Registrando misión:",
-            idmision
-        );
+  
 
         const respuesta = await fetch(
             "../php/api_guardar_examen.php",
@@ -481,10 +462,7 @@ async function registrarExamenRealizado() {
 
         const datos = await respuesta.json();
 
-        console.log(
-            "Respuesta registro examen:",
-            datos
-        );
+      
 
         if (datos.status !== "success") {
 
@@ -520,9 +498,6 @@ async function registrarRacha() {
 
     try {
 
-        console.log(
-            "🔥 Registrando racha..."
-        );
 
 
         const respuesta =
@@ -538,20 +513,13 @@ async function registrarRacha() {
             await respuesta.json();
 
 
-        console.log(
-            "🔥 Respuesta registrar racha:",
-            datos
-        );
+      
 
 
         if (
             datos.status === "success"
         ) {
 
-            console.log(
-                "✅ Racha actual:",
-                datos.racha
-            );
 
 
             // =================================================
@@ -569,10 +537,7 @@ async function registrarRacha() {
                 elementoRacha.textContent =
                     datos.racha;
 
-                console.log(
-                    "🔥 Racha actualizada en pantalla:",
-                    datos.racha
-                );
+               
 
             } else {
 
@@ -636,14 +601,7 @@ async function finalizarExamen() {
 
     examenFinalizado = true;
 
-    console.log(
-        "🏁 FINALIZANDO EXAMEN..."
-    );
-
-    console.log(
-        "📊 PUNTAJE FINAL:",
-        puntaje
-    );
+   
 
 
     // =================================================
@@ -662,10 +620,7 @@ async function finalizarExamen() {
         );
 
 
-    console.log(
-        "🆔 ID MISIÓN:",
-        idmision
-    );
+   
 
 
     if (
@@ -688,14 +643,6 @@ async function finalizarExamen() {
     // =================================================
 
     try {
-
-        console.log(
-            "💾 Guardando puntaje:",
-            {
-                idmision: idmision,
-                puntos: puntaje
-            }
-        );
 
 
         const respuesta =
@@ -728,10 +675,7 @@ async function finalizarExamen() {
             await respuesta.json();
 
 
-        console.log(
-            "📊 RESPUESTA PUNTAJE:",
-            datos
-        );
+    
 
 
         if (
@@ -745,10 +689,7 @@ async function finalizarExamen() {
 
         } else {
 
-            console.log(
-                "✅ PUNTAJE GUARDADO:",
-                datos.puntos_guardados
-            );
+           
 
         }
 

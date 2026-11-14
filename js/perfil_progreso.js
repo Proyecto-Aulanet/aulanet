@@ -1,17 +1,17 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    console.log("🔄 perfil_progreso.js cargado");
+
 
     // ===============================
     // 1. OBTENER FOTO Y NOMBRE DEL USUARIO
     // ===============================
     function cargarPerfil() {
-        console.log("🔄 Cargando datos del perfil (nombre y foto)...");
-        fetch("/Castoresmlaulanet/php/perfil_usuario.php")
+
+        fetch("/aulanet/php/perfil_usuario.php")
             .then(response => response.json())
             .then(data => {
-                console.log("👤 RespuestaPerfil:", data);
+
                 if (data.status !== "success") return;
 
                 const usuario = data.usuario;
@@ -41,10 +41,10 @@ document.addEventListener("DOMContentLoaded", function () {
         'use strict';
 
         function cargarPuntosProgreso() {
-            fetch("/Castoresmlaulanet/php/obtener_puntaje_total.php")
+            fetch("/aulanet/php/obtener_puntaje_total.php")
                 .then(response => response.json())
                 .then(data => {
-                    console.log("📊 Respuesta Puntaje:", data);
+
 
                     if (data.status === "success") {
                         const total = Number(data.puntaje_total).toLocaleString();
@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         const xpUsuario = document.getElementById("xpUsuario");
                         if (xpUsuario) {
                             xpUsuario.textContent = total;
-                            console.log("✅ Actualizado #xpUsuario con:", total);
+
                         } else {
                             console.warn("⚠️ No se encontró #xpUsuario en el HTML");
                         }
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         const xpRankingUsuario = document.getElementById("xpRankingUsuario");
                         if (xpRankingUsuario) {
                             xpRankingUsuario.textContent = `${total} XP`;
-                            console.log("✅ Actualizado #xpRankingUsuario con:", total);
+
                         }
                     } else {
                         console.warn("⚠️ Error en PHP de puntaje:", data.message);
