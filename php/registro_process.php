@@ -1,8 +1,16 @@
+
 <?php
+
 header("Content-Type: application/json; charset=UTF-8");
+
 require_once "conexion.php";
 
-function formatoNombre($texto){
+
+// ==============================================================================
+// FORMATEAR NOMBRES
+// ==============================================================================
+
+function formatoNombre($texto) {
 
     return mb_convert_case(
         strtolower(trim($texto)),
@@ -12,495 +20,663 @@ function formatoNombre($texto){
 
 }
 
+
+// ==============================================================================
+// VALIDAR MÉTODO
+// ==============================================================================
+
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+
     http_response_code(405);
+
     echo json_encode([
         "status" => "error",
         "message" => "Método no permitido"
     ]);
+
     exit;
 }
 
+
+// ==============================================================================
+// RECIBIR JSON
+// ==============================================================================
+
 $json = file_get_contents("php://input");
+
 $data = json_decode($json, true);
 
-if (!$data) {
+if (!is_array($data)) {
+
     http_response_code(400);
+
     echo json_encode([
         "status" => "error",
         "message" => "Datos JSON no válidos o vacíos."
     ]);
+
     exit;
 }
+
 
 $accion = strtolower(trim($data["accion"] ?? "crear"));
 
 try {
+
     switch ($accion) {
 
+
         // ==============================================================
-        // insertar
+        // CREAR USUARIO
         // ==============================================================
+
         case "crear":
         case "insertar":
-            $nombre    = formatoNombre($data["nombre"] ?? "");
+
+            $nombre = formatoNombre($data["nombre"] ?? "");
+
             $apellidop = formatoNombre($data["apellidop"] ?? "");
-            $apellidom = formatoNombre($data["apellidom"] ?? "");
-            $username  = trim($data["username"] ?? "");
-            $email     = trim($data["email"] ?? "");
-            $password  = trim($data["password"] ?? "");
-            $fechaNac  = !empty($data["fechaNac"]) ? $data["fechaNac"] : null;
 
-            $idpais   = (isset($data["idpais"]) && is_numeric($data["idpais"]) && (int)$data["idpais"] > 0) ? (int)$data["idpais"] : null;
-            $idestado = (isset($data["idestado"]) && is_numeric($data["idestado"]) && (int)$data["idestado"] > 0) ? (int)$data["idestado"] : null;
+            $username = trim($data["username"] ?? "");
 
-            if (empty($nombre) || empty($apellidop) || empty($apellidom) || empty($email) || empty($password)) {
+            $email = trim($data["email"] ?? "");
+
+            $password = $data["password"] ?? "";
+
+
+            // País y estado son opcionales.
+
+            $idpais = (
+                isset($data["idpais"]) &&
+                is_numeric($data["idpais"]) &&
+                (int)$data["idpais"] > 0
+            ) ? (int)$data["idpais"] : null;
+
+
+            $idestado = (
+                isset($data["idestado"]) &&
+                is_numeric($data["idestado"]) &&
+                (int)$data["idestado"] > 0
+            ) ? (int)$data["idestado"] : null;
+
+
+            // Validar únicamente los campos obligatorios.
+
+            if (
+                $nombre === "" ||
+                $apellidop === "" ||
+                $email === "" ||
+                trim($password) === ""
+            ) {
+
                 http_response_code(400);
+
                 echo json_encode([
-                    "status"  => "error",
+                    "status" => "error",
                     "message" => "Por favor llena todos los campos obligatorios."
                 ]);
+
                 exit;
             }
 
+
+            // Insertar usuario.
+            // Los campos eliminados del formulario se guardan vacíos o NULL.
+
             $stmt = $pdo->prepare("
+
                 INSERT INTO usuario (
-                    nombre, 
-                    apellidop, 
-                    apellidom, 
-                    username, 
-                    password, 
-                    email, 
-                    fechaNac, 
-                    idpais, 
+
+                    nombre,
+                    apellidop,
+                    apellidom,
+                    username,
+                    password,
+                    email,
+                    fechaNac,
+                    idpais,
                     idestado
+
                 ) VALUES (
-                    :nombre, 
-                    :apellidop, 
-                    :apellidom, 
-                    :username, 
-                    :password, 
-                    :email, 
-                    :fechaNac, 
-                    :idpais, 
+
+                    :nombre,
+                    :apellidop,
+                    '',
+                    :username,
+                    :password,
+                    :email,
+                    NULL,
+                    :idpais,
                     :idestado
+
                 )
+
             ");
 
+
             $stmt->bindValue(':nombre', $nombre);
+
             $stmt->bindValue(':apellidop', $apellidop);
-            $stmt->bindValue(':apellidom', $apellidom);
-            $stmt->bindValue(':username', !empty($username) ? $username : null);
-            $stmt->bindValue(':password', password_hash($password, PASSWORD_BCRYPT));
+
+            $stmt->bindValue(
+                ':username',
+                $username !== "" ? $username : null
+            );
+
+            $stmt->bindValue(
+                ':password',
+                password_hash($password, PASSWORD_BCRYPT)
+            );
+
             $stmt->bindValue(':email', $email);
-            $stmt->bindValue(':fechaNac', $fechaNac);
-            $stmt->bindValue(':idpais', $idpais, $idpais ? PDO::PARAM_INT : PDO::PARAM_NULL);
-            $stmt->bindValue(':idestado', $idestado, $idestado ? PDO::PARAM_INT : PDO::PARAM_NULL);
+
+            $stmt->bindValue(
+                ':idpais',
+                $idpais,
+                $idpais !== null ? PDO::PARAM_INT : PDO::PARAM_NULL
+            );
+
+            $stmt->bindValue(
+                ':idestado',
+                $idestado,
+                $idestado !== null ? PDO::PARAM_INT : PDO::PARAM_NULL
+            );
+
 
             $stmt->execute();
 
-            echo json_encode([
-                "status"    => "success",
-                "message"   => "¡usuario registrado exitosamente!",
-                "idusuario" => $pdo->lastInsertId()
-            ]);
-            break;
-
-        // ==============================================================
-        // consulta
-        // ==============================================================
-        case "leer":
-        case "consultar":
-            $idusuario = (isset($data["idusuario"]) && is_numeric($data["idusuario"])) ? (int)$data["idusuario"] : null;
-
-            if ($idusuario) {
-                $stmt = $pdo->prepare("
-                    SELECT u.idusuario, u.nombre, u.apellidop, u.apellidom, u.username, u.email, u.fechaNac, u.idpais, u.idestado,
-                           COALESCE(p.nombre, 'Sin especificar') AS pais,
-                           COALESCE(e.nombre, 'Sin especificar') AS estado
-                    FROM usuario u
-                    LEFT JOIN pais p ON u.idpais = p.idpais
-                    LEFT JOIN estado e ON u.idestado = e.idestado
-                    WHERE u.idusuario = :idusuario
-                ");
-                $stmt->bindValue(':idusuario', $idusuario, PDO::PARAM_INT);
-                $stmt->execute();
-                $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
-            } else {
-                $stmt = $pdo->query("
-                    SELECT u.idusuario, u.nombre, u.apellidop, u.apellidom, u.username, u.email, u.fechaNac, u.idpais, u.idestado,
-                           COALESCE(p.nombre, 'Sin especificar') AS pais,
-                           COALESCE(e.nombre, 'Sin especificar') AS estado
-                    FROM usuario u
-                    LEFT JOIN pais p ON u.idpais = p.idpais
-                    LEFT JOIN estado e ON u.idestado = e.idestado
-                ");
-                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            }
 
             echo json_encode([
                 "status" => "success",
-                "data"   => $resultado
+                "message" => "¡Usuario registrado exitosamente!",
+                "idusuario" => $pdo->lastInsertId()
             ]);
+
             break;
 
+
+
         // ==============================================================
-        // modificar
+        // CONSULTAR USUARIOS
         // ==============================================================
+
+        case "leer":
+        case "consultar":
+
+            $idusuario = (
+                isset($data["idusuario"]) &&
+                is_numeric($data["idusuario"])
+            ) ? (int)$data["idusuario"] : null;
+
+
+            if ($idusuario) {
+
+                $stmt = $pdo->prepare("
+
+                    SELECT
+
+                        u.idusuario,
+                        u.nombre,
+                        u.apellidop,
+                        u.username,
+                        u.email,
+                        u.idpais,
+                        u.idestado,
+
+                        COALESCE(p.nombre, 'Sin especificar') AS pais,
+
+                        COALESCE(e.nombre, 'Sin especificar') AS estado
+
+                    FROM usuario u
+
+                    LEFT JOIN pais p
+                        ON u.idpais = p.idpais
+
+                    LEFT JOIN estado e
+                        ON u.idestado = e.idestado
+
+                    WHERE u.idusuario = :idusuario
+
+                ");
+
+                $stmt->bindValue(
+                    ':idusuario',
+                    $idusuario,
+                    PDO::PARAM_INT
+                );
+
+                $stmt->execute();
+
+                $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            } else {
+
+                $stmt = $pdo->query("
+
+                    SELECT
+
+                        u.idusuario,
+                        u.nombre,
+                        u.apellidop,
+                        u.username,
+                        u.email,
+                        u.idpais,
+                        u.idestado,
+
+                        COALESCE(p.nombre, 'Sin especificar') AS pais,
+
+                        COALESCE(e.nombre, 'Sin especificar') AS estado
+
+                    FROM usuario u
+
+                    LEFT JOIN pais p
+                        ON u.idpais = p.idpais
+
+                    LEFT JOIN estado e
+                        ON u.idestado = e.idestado
+
+                ");
+
+                $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            }
+
+
+            echo json_encode([
+                "status" => "success",
+                "data" => $resultado
+            ]);
+
+            break;
+
+
+
+        // ==============================================================
+        // MODIFICAR USUARIO
+        // ==============================================================
+
         case "modificar":
         case "actualizar":
-            $idusuario = (isset($data["idusuario"]) && is_numeric($data["idusuario"]) && (int)$data["idusuario"] > 0) ? (int)$data["idusuario"] : 0;
+
+            $idusuario = (
+                isset($data["idusuario"]) &&
+                is_numeric($data["idusuario"]) &&
+                (int)$data["idusuario"] > 0
+            ) ? (int)$data["idusuario"] : 0;
+
 
             if ($idusuario <= 0) {
+
                 http_response_code(400);
+
                 echo json_encode([
-                    "status"  => "error",
-                    "message" => "Se requiere el 'idusuario' válido para modificar."
+                    "status" => "error",
+                    "message" => "Se requiere un idusuario válido para modificar."
                 ]);
+
                 exit;
             }
 
-            $nombre    = formatoNombre($data["nombre"] ?? "");
+
+            $nombre = formatoNombre($data["nombre"] ?? "");
+
             $apellidop = formatoNombre($data["apellidop"] ?? "");
-            $apellidom = formatoNombre($data["apellidom"] ?? "");
-            $username  = trim($data["username"] ?? "");
-            $email     = trim($data["email"] ?? "");
-            $password  = trim($data["password"] ?? "");
-            $fechaNac  = !empty($data["fechaNac"]) ? $data["fechaNac"] : null;
 
-            $idpais   = (isset($data["idpais"]) && is_numeric($data["idpais"]) && (int)$data["idpais"] > 0) ? (int)$data["idpais"] : null;
-            $idestado = (isset($data["idestado"]) && is_numeric($data["idestado"]) && (int)$data["idestado"] > 0) ? (int)$data["idestado"] : null;
+            $username = trim($data["username"] ?? "");
 
-            if (empty($nombre) || empty($apellidop) || empty($apellidom) || empty($email)) {
+            $email = trim($data["email"] ?? "");
+
+            $password = $data["password"] ?? "";
+
+
+            $idpais = (
+                isset($data["idpais"]) &&
+                is_numeric($data["idpais"]) &&
+                (int)$data["idpais"] > 0
+            ) ? (int)$data["idpais"] : null;
+
+
+            $idestado = (
+                isset($data["idestado"]) &&
+                is_numeric($data["idestado"]) &&
+                (int)$data["idestado"] > 0
+            ) ? (int)$data["idestado"] : null;
+
+
+            if (
+                $nombre === "" ||
+                $apellidop === "" ||
+                $email === ""
+            ) {
+
                 http_response_code(400);
+
                 echo json_encode([
-                    "status"  => "error",
+                    "status" => "error",
                     "message" => "Por favor llena los campos obligatorios."
                 ]);
+
                 exit;
             }
 
-            if (!empty($password)) {
+
+            if ($password !== "") {
+
                 $stmt = $pdo->prepare("
-                    UPDATE usuario SET 
-                        nombre = :nombre, 
-                        apellidop = :apellidop, 
-                        apellidom = :apellidom, 
-                        username = :username, 
-                        password = :password, 
-                        email = :email, 
-                        fechaNac = COALESCE(:fechaNac, fechaNac),
-                        idpais = COALESCE(:idpais, idpais),
-                        idestado = COALESCE(:idestado, idestado)
+
+                    UPDATE usuario SET
+
+                        nombre = :nombre,
+                        apellidop = :apellidop,
+                        username = :username,
+                        password = :password,
+                        email = :email,
+                        idpais = :idpais,
+                        idestado = :idestado
+
                     WHERE idusuario = :idusuario
+
                 ");
-                $stmt->bindValue(':password', password_hash($password, PASSWORD_BCRYPT));
+
+                $stmt->bindValue(
+                    ':password',
+                    password_hash($password, PASSWORD_BCRYPT)
+                );
+
             } else {
+
                 $stmt = $pdo->prepare("
-                    UPDATE usuario SET 
-                        nombre = :nombre, 
-                        apellidop = :apellidop, 
-                        apellidom = :apellidom, 
-                        username = :username, 
-                        email = :email, 
-                        fechaNac = COALESCE(:fechaNac, fechaNac),
-                        idpais = COALESCE(:idpais, idpais),
-                        idestado = COALESCE(:idestado, idestado)
+
+                    UPDATE usuario SET
+
+                        nombre = :nombre,
+                        apellidop = :apellidop,
+                        username = :username,
+                        email = :email,
+                        idpais = :idpais,
+                        idestado = :idestado
+
                     WHERE idusuario = :idusuario
+
                 ");
+
             }
 
-            $stmt->bindValue(':nombre', $nombre);
-            $stmt->bindValue(':apellidop', $apellidop);
-            $stmt->bindValue(':apellidom', $apellidom);
-            $stmt->bindValue(':username', !empty($username) ? $username : null);
-            $stmt->bindValue(':email', $email);
-            $stmt->bindValue(':fechaNac', $fechaNac);
-            $stmt->bindValue(':idpais', $idpais, $idpais ? PDO::PARAM_INT : PDO::PARAM_NULL);
-            $stmt->bindValue(':idestado', $idestado, $idestado ? PDO::PARAM_INT : PDO::PARAM_NULL);
-            $stmt->bindValue(':idusuario', $idusuario, PDO::PARAM_INT);
 
-            
+            $stmt->bindValue(':nombre', $nombre);
+
+            $stmt->bindValue(':apellidop', $apellidop);
+
+            $stmt->bindValue(
+                ':username',
+                $username !== "" ? $username : null
+            );
+
+            $stmt->bindValue(':email', $email);
+
+            $stmt->bindValue(
+                ':idpais',
+                $idpais,
+                $idpais !== null ? PDO::PARAM_INT : PDO::PARAM_NULL
+            );
+
+            $stmt->bindValue(
+                ':idestado',
+                $idestado,
+                $idestado !== null ? PDO::PARAM_INT : PDO::PARAM_NULL
+            );
+
+            $stmt->bindValue(
+                ':idusuario',
+                $idusuario,
+                PDO::PARAM_INT
+            );
+
 
             $stmt->execute();
 
+
             echo json_encode([
-                "status"  => "success",
-                "message" => "¡usuario actualizado exitosamente!"
+                "status" => "success",
+                "message" => "¡Usuario actualizado exitosamente!"
             ]);
+
             break;
 
-            
 
 
-// ==============================================================
-// GUARDAR FOTO DE PERFIL
-// ==============================================================
+        // ==============================================================
+        // GUARDAR FOTO DE PERFIL
+        // ==============================================================
 
-case "foto":
+        case "foto":
 
-    $idusuario = (int)($data["idusuario"] ?? 0);
-    $ruta_imagen = trim($data["ruta_imagen"] ?? "");
+            $idusuario = (int)($data["idusuario"] ?? 0);
 
-    if ($idusuario <= 0 || empty($ruta_imagen)) {
+            $ruta_imagen = trim($data["ruta_imagen"] ?? "");
 
-        http_response_code(400);
 
-        echo json_encode([
-            "status" => "error",
-            "message" => "Datos de foto incompletos"
-        ]);
+            if ($idusuario <= 0 || $ruta_imagen === "") {
 
-        exit;
-    }
+                http_response_code(400);
 
-    $stmt = $pdo->prepare("
-        UPDATE usuario
-        SET foto_perfil = :ruta_imagen
-        WHERE idusuario = :idusuario
-    ");
+                echo json_encode([
+                    "status" => "error",
+                    "message" => "Datos de foto incompletos."
+                ]);
 
-    $stmt->bindValue(
-        ":ruta_imagen",
-        $ruta_imagen,
-        PDO::PARAM_STR
-    );
+                exit;
+            }
 
-    $stmt->bindValue(
-        ":idusuario",
-        $idusuario,
-        PDO::PARAM_INT
-    );
 
-    $stmt->execute();
+            $stmt = $pdo->prepare("
 
-    if ($stmt->rowCount() >= 0) {
+                UPDATE usuario
 
-        echo json_encode([
-            "status" => "success",
-            "message" => "Foto guardada correctamente"
-        ]);
+                SET foto_perfil = :ruta_imagen
 
-    } else {
+                WHERE idusuario = :idusuario
 
-        http_response_code(404);
+            ");
 
-        echo json_encode([
-            "status" => "error",
-            "message" => "Usuario no encontrado"
-        ]);
-    }
 
-    break;
+            $stmt->bindValue(
+                ':ruta_imagen',
+                $ruta_imagen,
+                PDO::PARAM_STR
+            );
 
+            $stmt->bindValue(
+                ':idusuario',
+                $idusuario,
+                PDO::PARAM_INT
+            );
 
 
+            $stmt->execute();
 
 
-// ==============================================================
-// ELIMINAR USUARIO
-// ==============================================================
+            if ($stmt->rowCount() > 0) {
 
-case "eliminar":
-case "borrar":
+                echo json_encode([
+                    "status" => "success",
+                    "message" => "Foto guardada correctamente."
+                ]);
 
-    $idusuario = (
-        isset($data["idusuario"]) &&
-        is_numeric($data["idusuario"]) &&
-        (int)$data["idusuario"] > 0
-    )
-    ? (int)$data["idusuario"]
-    : 0;
+            } else {
 
+                // Comprobar si el usuario existe aunque la ruta no haya cambiado.
 
-    if ($idusuario <= 0) {
+                $verificar = $pdo->prepare("
+                    SELECT idusuario FROM usuario
+                    WHERE idusuario = :idusuario
+                ");
 
-        http_response_code(400);
+                $verificar->execute([
+                    ':idusuario' => $idusuario
+                ]);
 
-        echo json_encode([
-            "status"  => "error",
-            "message" => "Se requiere un 'idusuario' válido para eliminar."
-        ]);
+                if ($verificar->fetch()) {
 
-        exit;
-    }
+                    echo json_encode([
+                        "status" => "success",
+                        "message" => "La foto ya estaba guardada."
+                    ]);
 
+                } else {
 
-    // ==========================================================
-    // INICIAR TRANSACCIÓN
-    // ==========================================================
+                    http_response_code(404);
 
-    $pdo->beginTransaction();
+                    echo json_encode([
+                        "status" => "error",
+                        "message" => "Usuario no encontrado."
+                    ]);
 
+                }
 
-    // ==========================================================
-    // 1. ELIMINAR LECCIONES DEL USUARIO
-    // ==========================================================
+            }
 
-    $stmt = $pdo->prepare("
-        DELETE FROM lecciones_usuario
-        WHERE idusuario = :idusuario
-    ");
+            break;
 
-    $stmt->bindValue(
-        ':idusuario',
-        $idusuario,
-        PDO::PARAM_INT
-    );
 
-    $stmt->execute();
 
+        // ==============================================================
+        // ELIMINAR USUARIO
+        // ==============================================================
 
-    // ==========================================================
-    // 2. ELIMINAR INTENTOS DE EXAMEN
-    // ==========================================================
+        case "eliminar":
+        case "borrar":
 
-    $stmt = $pdo->prepare("
-        DELETE FROM intentoexamen
-        WHERE idusuario = :idusuario
-    ");
+            $idusuario = (
+                isset($data["idusuario"]) &&
+                is_numeric($data["idusuario"]) &&
+                (int)$data["idusuario"] > 0
+            ) ? (int)$data["idusuario"] : 0;
 
-    $stmt->bindValue(
-        ':idusuario',
-        $idusuario,
-        PDO::PARAM_INT
-    );
 
-    $stmt->execute();
+            if ($idusuario <= 0) {
 
+                http_response_code(400);
 
-    // ==========================================================
-    // 3. ELIMINAR MEDALLAS DEL USUARIO
-    // ==========================================================
+                echo json_encode([
+                    "status" => "error",
+                    "message" => "Se requiere un idusuario válido para eliminar."
+                ]);
 
-    $stmt = $pdo->prepare("
-        DELETE FROM usuario_medalla
-        WHERE idusuario = :idusuario
-    ");
+                exit;
+            }
 
-    $stmt->bindValue(
-        ':idusuario',
-        $idusuario,
-        PDO::PARAM_INT
-    );
 
-    $stmt->execute();
+            $pdo->beginTransaction();
 
 
-    // ==========================================================
-    // 4. ELIMINAR PUNTAJES
-    // ==========================================================
+            // Eliminar registros relacionados.
 
-    $stmt = $pdo->prepare("
-        DELETE FROM puntaje
-        WHERE idusuario = :idusuario
-    ");
+            $tablasRelacionadas = [
+                "lecciones_usuario",
+                "intentoexamen",
+                "usuario_medalla",
+                "puntaje",
+                "racha"
+            ];
 
-    $stmt->bindValue(
-        ':idusuario',
-        $idusuario,
-        PDO::PARAM_INT
-    );
 
-    $stmt->execute();
+            foreach ($tablasRelacionadas as $tabla) {
 
+                $stmt = $pdo->prepare("
+                    DELETE FROM `$tabla`
+                    WHERE idusuario = :idusuario
+                ");
 
-    // ==========================================================
-    // 5. ELIMINAR RACHA
-    // ==========================================================
+                $stmt->bindValue(
+                    ':idusuario',
+                    $idusuario,
+                    PDO::PARAM_INT
+                );
 
-    $stmt = $pdo->prepare("
-        DELETE FROM racha
-        WHERE idusuario = :idusuario
-    ");
+                $stmt->execute();
 
-    $stmt->bindValue(
-        ':idusuario',
-        $idusuario,
-        PDO::PARAM_INT
-    );
+            }
 
-    $stmt->execute();
 
+            // Eliminar usuario.
 
+            $stmt = $pdo->prepare("
 
+                DELETE FROM usuario
 
+                WHERE idusuario = :idusuario
 
-    // ==========================================================
-    // 7. ELIMINAR USUARIO
-    // ==========================================================
+            ");
 
-    $stmt = $pdo->prepare("
-        DELETE FROM usuario
-        WHERE idusuario = :idusuario
-    ");
 
-    $stmt->bindValue(
-        ':idusuario',
-        $idusuario,
-        PDO::PARAM_INT
-    );
+            $stmt->bindValue(
+                ':idusuario',
+                $idusuario,
+                PDO::PARAM_INT
+            );
 
-    $stmt->execute();
 
+            $stmt->execute();
 
-    // ==========================================================
-    // CONFIRMAR ELIMINACIÓN
-    // ==========================================================
 
-    if ($stmt->rowCount() > 0) {
+            if ($stmt->rowCount() > 0) {
 
-        $pdo->commit();
+                $pdo->commit();
 
-        echo json_encode([
-            "status"  => "success",
-            "message" => "usuario eliminado exitosamente."
-        ]);
+                echo json_encode([
+                    "status" => "success",
+                    "message" => "Usuario eliminado exitosamente."
+                ]);
 
-    } else {
+            } else {
 
-        $pdo->rollBack();
+                $pdo->rollBack();
 
-        http_response_code(404);
+                http_response_code(404);
 
-        echo json_encode([
-            "status"  => "error",
-            "message" => "No se encontró ningún usuario con ese ID."
-        ]);
+                echo json_encode([
+                    "status" => "error",
+                    "message" => "No se encontró ningún usuario con ese ID."
+                ]);
+
+            }
+
+            break;
+
+
+
+        // ==============================================================
+        // ACCIÓN NO VÁLIDA
+        // ==============================================================
+
+        default:
+
+            http_response_code(400);
+
+            echo json_encode([
+                "status" => "error",
+                "message" => "Acción no válida."
+            ]);
+
+            break;
 
     }
 
-break;
-
-// ==========================================================
-    // ACCIÓN NO VÁLIDA
-    // ==========================================================
-
-    default:
-
-        http_response_code(400);
-
-        echo json_encode([
-            "status"  => "error",
-            "message" => "Acción no válida."
-        ]);
-
-        break;
-
-    }
 
 } catch (PDOException $e) {
 
-    // Si había una transacción activa, cancelarla
     if ($pdo->inTransaction()) {
         $pdo->rollBack();
     }
 
     http_response_code(500);
 
+    error_log("Error en registro_process.php: " . $e->getMessage());
+
     echo json_encode([
-        "status"  => "error",
-        "message" => "Error MySQL: " . $e->getMessage()
+        "status" => "error",
+        "message" => "Ocurrió un error al procesar la solicitud. Verifica los datos e inténtalo nuevamente."
     ]);
 
 }

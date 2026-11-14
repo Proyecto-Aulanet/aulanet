@@ -1,4 +1,4 @@
-console.log("MotorLecciones cargado");
+
 
 
 const MotorLecciones = {
@@ -16,7 +16,7 @@ const MotorLecciones = {
     async iniciar(){
 
 
-        console.log("Iniciando práctica");
+
 
 
         const url = new URLSearchParams(window.location.search);
@@ -47,16 +47,10 @@ const MotorLecciones = {
         }
 
 
-        console.log(
-            "Misión:",
-            configMisiones[this.idmision].nombre
-        );
 
 
-        console.log(
-            "ID misión:",
-            this.idmision
-        );
+
+
 
 
         /*
@@ -71,11 +65,8 @@ const MotorLecciones = {
 
 
 
-        console.log(
-            "Preguntas:",
-            this.preguntas
-        );
-        console.log("Misión actual:", this.idmision);
+
+
 
 
 
@@ -194,11 +185,7 @@ const MotorLecciones = {
     );
 
 
-    console.log(
-        "Puntaje guardado:",
-        this.idmision,
-        this.puntaje
-    );
+
 
 
     UILecciones.mostrarResultado(

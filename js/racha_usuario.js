@@ -2,9 +2,7 @@ async function cargarRacha() {
 
     try {
 
-        console.log(
-            "🔥 Cargando racha..."
-        );
+
 
 
         const respuesta =
@@ -17,10 +15,7 @@ async function cargarRacha() {
             await respuesta.json();
 
 
-        console.log(
-            "🔥 Racha recibida:",
-            datos
-        );
+
 
 
         if (

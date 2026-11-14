@@ -257,19 +257,13 @@
 
 
                         <!-- Nombre -->
-                        <div class="perfil-info d-none d-md-block">
 
+<div class="perfil-info d-none d-md-block">
+    <span id="nombreUsuario" class="perfil-nombre">
+        Invitado
+    </span>
+</div>
 
-                            <span id="nombreUsuario" class="perfil-nombre" data-es="Invitado" data-na="Tlapowalistli">
-
-
-                                Invitado
-
-
-                            </span>
-
-
-                        </div>
 
 
                         <!-- Triángulo -->
@@ -1057,67 +1051,34 @@
 
 
     <script>
+async function cargarUsuario() {
+    const elementoNombre = document.getElementById("nombreUsuario");
 
 
-        async function cargarUsuario() {
+    if (!elementoNombre) return;
 
 
-            try {
+    try {
+        const respuesta = await fetch("../php/sesion_usuario.php");
+        const resultado = await respuesta.json();
 
 
-                const respuesta = await fetch("../php/sesion_usuario.php");
-
-
-                const resultado = await respuesta.json();
-
-
-
-
-                const nombreUsuario = document.getElementById("nombreUsuario");
-
-
-
-
-                if (resultado.status === "success") {
-
-
-                    nombreUsuario.textContent =
-                        resultado.usuario.nombre;
-
-
-                } else {
-
-
-                    nombreUsuario.textContent =
-                        "Usuario";
-
-
-                }
-
-
-
-
-            } catch (error) {
-
-
-                console.error("Error sesión:", error);
-
-
-            }
-
+        if (resultado.status === "success" && resultado.usuario?.nombre) {
+            elementoNombre.textContent = resultado.usuario.nombre;
+        } else {
+            elementoNombre.textContent = "Invitado";
 
         }
 
+    } catch (error) {
+        console.error("Error sesión:", error);
+    }
+}
 
 
+document.addEventListener("DOMContentLoaded", cargarUsuario);
+</script>
 
-        document.addEventListener(
-            "DOMContentLoaded",
-            cargarUsuario
-        );
-
-
-    </script>
 
 
     <!-- INIT AOS -->

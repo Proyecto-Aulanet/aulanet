@@ -92,7 +92,7 @@ async function actualizarTarjetaCompartir() {
             ) {
 
                 rutaFoto =
-                    "/Castoresmlaulanet/" +
+                    "/aulanet/" +
                     rutaFoto.replace(
                         "../",
                         ""
@@ -106,7 +106,7 @@ async function actualizarTarjetaCompartir() {
             ) {
 
                 rutaFoto =
-                    "/Castoresmlaulanet/" +
+                    "/aulanet/" +
                     rutaFoto;
 
             }
@@ -308,7 +308,7 @@ async function generarCanvasTarjeta() {
         );
     }
 
-    console.log("Preparando tarjeta para exportación...");
+   
 
     /*
     =====================================================
@@ -497,12 +497,6 @@ async function generarCanvasTarjeta() {
     const rect =
         tarjeta.getBoundingClientRect();
 
-    console.log(
-        "Tarjeta temporal:",
-        rect.width,
-        "x",
-        rect.height
-    );
 
     if (
         rect.width === 0 ||
@@ -736,9 +730,7 @@ async function descargarTarjeta() {
         enlace.remove();
 
 
-        console.log(
-            "Tarjeta descargada correctamente."
-        );
+       
 
 
     } catch (error) {
@@ -854,10 +846,7 @@ async function compartirWhatsApp() {
                     El usuario pudo cancelar
                     */
 
-                    console.log(
-                        "Compartir cancelado:",
-                        error
-                    );
+                   
 
                 }
 

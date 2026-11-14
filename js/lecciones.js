@@ -1,6 +1,6 @@
 //document.addEventListener('DOMContentLoaded', () => {
     // Ruta base a tu PHP
-    const API_URL = '/Castoresmlaulanet/php/get_lecciones.php';
+    const API_URL = '/aulanet/php/get_lecciones.php';
     let horaInicioExamen = null;
 
     // 1. OBTENER LISTA DE LECCIONES (MISIONES) -> Método GET
@@ -10,7 +10,7 @@
             const data = await res.json();
 
             if (data.status === 'success') {
-                console.log("Lecciones disponibles:", data.data);
+
                 // AQUÍ: Puedes llamar a una función para renderizar las lecciones en el HTML
             }
         } catch (error) {
@@ -43,7 +43,7 @@
             const data = await res.json();
 
             if (data.status === 'success') {
-                console.log(`Puntaje semanal del usuario ${idusuario}:`, data.data);
+
 
                 // Si tienes elementos en HTML con esta ID, se actualizarán solos:
                 const elPuntos = document.getElementById('total-puntos');

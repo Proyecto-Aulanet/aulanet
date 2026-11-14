@@ -1,4 +1,4 @@
-const API_RACHA_URL = '/Castoresmlaulanet/php/racha.php';
+const API_RACHA_URL = '/aulanet/php/racha.php';
 
 /**
  * @param {number} idusuario 
@@ -53,7 +53,7 @@ async function completarMision(idusuario, idmision) {
 
             alert(`¡Misión completada! Tu racha actual es: ${data.racha_actual} día(s)`);
 
-            window.location.href = '/Castoresmlaulanet/pages_int/mapa_abecedario.html';
+            window.location.href = '/aulanet/pages_int/mapa_abecedario.html';
         } else {
             alert('Error al guardar el progreso: ' + data.mensaje);
         }

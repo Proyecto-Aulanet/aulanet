@@ -1,4 +1,4 @@
-console.log("Medallas JS cargado (Sesión en BD)");
+
 
 const informacionMedallas = {
     1: { nombre: "CALLY", descripcion: "Guardiana del Abecedario", imagen: "medalla_abecedario.png" },
@@ -183,7 +183,7 @@ function abrirModalMedallas() {
     // Evitar que la página de atrás se mueva
     document.body.style.overflow = "hidden";
 
-    console.log("🏆 Modal de medallas abierto.");
+
 }
 
 
@@ -202,7 +202,7 @@ function cerrarModalMedallas() {
     // Restaurar scroll
     document.body.style.overflow = "";
 
-    console.log("❌ Modal de medallas cerrado.");
+
 }
 
 

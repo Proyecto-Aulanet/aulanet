@@ -223,17 +223,10 @@
                     <!-- NOMBRE -->
 
                     <div class="perfil-info d-none d-md-block">
-
-                        <span id="nombreUsuario"
-                              class="perfil-nombre"
-                              data-es="Invitado"
-                              data-na="Tlapowalistli">
-
-                            Invitado
-
-                        </span>
-
-                    </div>
+    <span id="nombreUsuario" class="perfil-nombre">
+        Invitado
+    </span>
+</div>
 
 
                     <!-- FLECHA -->
@@ -788,8 +781,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         const idMision =
             parseInt(parametros.get("idmision"));
 
-        console.log("Misión recibida:", idMision);
-
 
         if (!idMision || isNaN(idMision)) {
 
@@ -897,13 +888,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
 
 
-        console.log(
-            "Categoría encontrada:",
-            categoriaID,
-            nombreCategoria
-        );
-
-
         // =====================================================
         // COMPROBAR CATEGORÍA
         // =====================================================
@@ -948,12 +932,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             `../php/api_practica.php?categoria=${categoriaID}`;
 
 
-        console.log(
-            "Consultando API:",
-            urlAPI
-        );
-
-
         const respuesta =
             await fetch(urlAPI);
 
@@ -971,11 +949,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         const datos =
             await respuesta.json();
 
-
-        console.log(
-            "Respuesta API prácticas:",
-            datos
-        );
 
 
         // =====================================================
@@ -1008,11 +981,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                 .sort(() => Math.random() - 0.5)
                 .slice(0, 5);
 
-
-        console.log(
-            "Preguntas para la práctica:",
-            preguntas
-        );
 
 
         if (preguntas.length === 0) {

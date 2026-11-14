@@ -1,4 +1,4 @@
-console.log("Prácticas cargadas");
+
 
 
 // =====================================================
@@ -51,20 +51,14 @@ async function cargarPractica(idmision) {
 
     try {
 
-        console.log(
-            "Misión recibida:",
-            idmision
-        );
+
 
 
         const categoria =
             obtenerCategoriaPorMision(idmision);
 
 
-        console.log(
-            "Categoría encontrada:",
-            categoria
-        );
+
 
 
         if (!categoria) {
@@ -87,10 +81,7 @@ async function cargarPractica(idmision) {
             `../php/api_practica.php?categoria=${categoria}`;
 
 
-        console.log(
-            "Consultando API:",
-            url
-        );
+
 
 
         const respuesta =
@@ -110,10 +101,7 @@ async function cargarPractica(idmision) {
             await respuesta.json();
 
 
-        console.log(
-            "Respuesta API prácticas:",
-            datos
-        );
+
 
 
         if (datos.status !== "success") {

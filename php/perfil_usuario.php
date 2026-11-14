@@ -66,7 +66,7 @@ try {
      * La ruta ya está guardada en usuario.foto_perfil.
      *
      * Si está vacía, dejamos la foto vacía.
-     * Si ya comienza con /Castoresmlaulanet/,
+     * Si ya comienza con /aulanet/,
      * no agregamos nuevamente la ruta.
      */
 
@@ -76,13 +76,13 @@ try {
 
         $foto = $usuario["foto_perfil"];
 
-        if (strpos($foto, "/Castoresmlaulanet/") === 0) {
+        if (strpos($foto, "/aulanet/") === 0) {
 
             $rutaFoto = $foto;
 
         } else {
 
-            $rutaFoto = "/Castoresmlaulanet/" . ltrim(
+            $rutaFoto = "/aulanet/" . ltrim(
                 str_replace("../", "", $foto),
                 "/"
             );

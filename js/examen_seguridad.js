@@ -1,4 +1,4 @@
-console.log("Seguridad del examen iniciada");
+
 
 let examenCancelado = false;
 

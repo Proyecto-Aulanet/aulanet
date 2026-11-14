@@ -1,4 +1,4 @@
-console.log("PERFIL JS CARGADO");
+
 
 
 const API_PERFIL = "../php/perfil.php";
@@ -121,7 +121,7 @@ async function cargarPerfil(){
 
 
 
-        console.log(resultado);
+
         
 
 
@@ -136,7 +136,7 @@ async function cargarPerfil(){
 
             idUsuarioActual = parseInt(usuario.idusuario, 10);
 
-            console.log("ID USUARIO OBTENIDO DEL PERFIL:", idUsuarioActual);
+
 
 
 
@@ -383,7 +383,7 @@ async function guardarPerfil(){
 
         const resultado = await respuesta.json();
 
-        console.log("Respuesta del servidor:", resultado);
+
 
         if(resultado.status === "success"){
 
@@ -483,7 +483,7 @@ async function eliminarCuenta(){
 
             let resultadoPHP = await respuesta.json();
 
-            console.log("Respuesta eliminar:", resultadoPHP);
+
 
             if(resultadoPHP.status==="success"){
 
@@ -592,10 +592,7 @@ const iconos = [
             img.style.borderRadius="10px";
 
 
-            console.log(
-                "Icono seleccionado:",
-                iconoSeleccionado
-            );
+
 
         };
 
@@ -620,7 +617,7 @@ modal.show();
 
 
 async function guardarIcono(){
-        console.log("ENTRÓ A GUARDAR ICONO");
+
     if(!iconoSeleccionado){
         return;
     }
@@ -633,7 +630,7 @@ async function guardarIcono(){
 
     };
 
-    console.log("Enviando:", datos);
+
 
     const respuesta = await fetch("../php/registro_process.php",{
 
@@ -649,7 +646,7 @@ async function guardarIcono(){
 
     const resultado = await respuesta.json();
 
-    console.log(resultado);
+
 
     if(resultado.status === "success"){
 
