@@ -3,13 +3,6 @@ const API_URL = '../php/registro_process.php';
 document.addEventListener('DOMContentLoaded', () => {
     cargarPaises();
 
-    const fechaNac = document.querySelector('#fechaNac');
-
-    if (fechaNac) {
-        fechaNac.min = "1900-01-01";
-        fechaNac.max = "2026-12-31";
-    }
-
     const selectPais = document.querySelector('#pais');
     if (selectPais) {
         selectPais.addEventListener('change', cambiarPais);
@@ -50,7 +43,6 @@ async function guardarUsuario(e) {
         nombre: document.querySelector('#nombre')?.value.trim(),
         apellidop: document.querySelector('#apellidop')?.value.trim(),
         apellidom: document.querySelector('#apellidom')?.value.trim(),
-        fechaNac: document.querySelector('#fechaNac')?.value || null,
         username: document.querySelector('#username')?.value.trim(),
         email: document.querySelector('#email')?.value.trim(),
         password: password,

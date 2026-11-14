@@ -118,10 +118,10 @@
                     <!-- LOGO -->
                     <div class="headerint-logo">
 
-                    <img src="../Recursos/logos/logos.svg" alt="logo" class="img-fluid" style="max-width:185px;"
-                        data-aos="fade-right">
+                        <img src="../Recursos/logos/logos.svg" alt="logo" class="img-fluid" style="max-width:185px;"
+                            data-aos="fade-right">
 
-                </div>
+                    </div>
 
                     <!-- ESTADÍSTICAS -->
                     <div class="headerint-stats d-flex align-items-center justify-content-center gap-3 flex-wrap"
@@ -328,7 +328,8 @@
         <!-- BOTÓN TRADUCTOR -->
         <div class="presen-traductor-int">
 
-            <button class="btn btn-light rounded-circle traductor-btn" onclick="presenToggleMenu()" data-aos="zoom-in">
+            <button class="btn btn-light rounded-circle traductor-btn" onclick="presenToggleMenu()" title="Traductor"
+                data-aos="zoom-in">
 
                 <i class="bi bi-translate"></i>
 
@@ -806,6 +807,7 @@
                 </div>
 
                 <div class="mb-4 text-start">
+                    //Historia
                     <div class="row g-2 d-none" id="m-gal-historia">
                         <div class="col-12">
                             <a href="https://youtube.com/shorts/grFAXusjgtg?feature=share" target="_blank"
@@ -828,8 +830,13 @@
                                 </div>
                             </a>
                         </div>
+                        <button class="btn btn-success w-100 rounded-pill fw-bold mt-2 py-2 shadow-sm"
+                            onclick="cerrarSeccion()">
+                            <span data-es="Volver al Menú" data-na="Nican mocuepa">Volver al Menú</span>
+                        </button>
                     </div>
 
+                    //Gastronomia
                     <div class="row g-2 d-none" id="m-gal-gastronomia">
                         <div class="col-6 position-relative">
                             <div class="img-wrapper">
@@ -848,8 +855,13 @@
                                 <button class="btn-interaccion" onclick="cerrarImagen(this)"></button>
                             </div>
                         </div>
+                        <button class="btn btn-warning text-dark w-100 rounded-pill fw-bold mt-2 py-2 shadow-sm"
+                            onclick="cerrarSeccion()">
+                            <span data-es="Volver al Menú" data-na="Nican mocuepa">Volver al Menú</span>
+                        </button>
                     </div>
-                    //
+
+                    //Arqueologia
                     <div class="row g-2 d-none" id="m-gal-arqueologia">
                         <div class="col-6 position-relative">
                             <div class="img-wrapper">
@@ -867,8 +879,13 @@
                                 <button class="btn-interaccion" onclick="cerrarImagen(this)"></button>
                             </div>
                         </div>
+                        <button class="btn btn-info text-white w-100 rounded-pill fw-bold mt-2 py-2 shadow-sm"
+                            onclick="cerrarSeccion()">
+                            <span data-es="Volver al Menú" data-na="Nican mocuepa">Volver al Menú</span>
+                        </button>
                     </div>
-                    //
+
+                    //Historica
                     <div class="row g-2 d-none" id="m-gal-historica">
                         <!-- Primera Imagen Interactiva -->
                         <div class="col-6 position-relative">
@@ -907,8 +924,13 @@
                                 <button class="btn-interaccion" onclick="cerrarImagen(this)"></button>
                             </div>
                         </div>
+                        <button class="btn btn-danger w-100 rounded-pill fw-bold mt-2 py-2 shadow-sm"
+                            onclick="cerrarSeccion()">
+                            <span data-es="Volver al Menú" data-na="Nican mocuepa">Volver al Menú</span>
+                        </button>
                     </div>
-                    //
+
+                    //Textiles
                     <div class="row g-2 d-none" id="m-gal-textiles">
                         <div class="col-6 position-relative">
                             <div class="img-wrapper">
@@ -927,13 +949,12 @@
                                 <button class="btn-interaccion" onclick="cerrarImagen(this)"></button>
                             </div>
                         </div>
+                        <button class="btn btn-primary w-100 rounded-pill fw-bold mt-2 py-2 shadow-sm"
+                            onclick="cerrarSeccion()">
+                            <span data-es="Volver al Menú" data-na="Nican mocuepa">Volver al Menú</span>
+                        </button>
                     </div>
-                    //
                 </div>
-
-                <button class="btn btn-dark w-100 rounded-pill fw-bold py-2 shadow-sm" onclick="cerrarSeccion()">
-                    <span data-es="Volver al Menú" data-na="Nican mocuepa">Volver al Menú</span>
-                </button>
             </div>
 
 
