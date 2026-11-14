@@ -14,13 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cargarPaises();
 
-    const fechaNac = document.querySelector('#fechaNac');
-
-    if (fechaNac) {
-        fechaNac.min = "1900-01-01";
-        fechaNac.max = "2026-12-31";
-    }
-
     const selectPais = document.querySelector('#pais');
 
     if (selectPais) {
@@ -157,7 +150,9 @@ async function enviarDatosUsuario(password, idusuarioInput) {
 
         apellidom: document.querySelector('#apellidom')?.value.trim(),
 
+
         fechaNac: document.querySelector('#fechaNac')?.value || null,
+
 
         username: document.querySelector('#username')?.value.trim(),
 
