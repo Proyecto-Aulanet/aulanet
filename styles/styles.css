@@ -9339,7 +9339,7 @@ body {
 
 /* 1. Grosor sutil de la barra */
 ::-webkit-scrollbar {
-  width: 12px;
+  width:  18px;
 }
 
 /* Riel: Verde menta suave / Barrita: Verde oscuro profundo */
@@ -13282,4 +13282,43 @@ body.modal-medallas-abierto {
     color: #ffffff;
 
 
+}
+/* Flechas grandes y contrastantes para las barras verticales */
+::-webkit-scrollbar-button:single-button:vertical:decrement,
+::-webkit-scrollbar-button:single-button:vertical:increment {
+  display: block;
+  height: 19px;
+  background-color: #ff9518;
+  border: 2px solid #8f3c00;
+  box-shadow: inset 0 0 0 1px #ffd17a;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+::-webkit-scrollbar-button:single-button:vertical:decrement {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath fill='white' d='M2 8l4-4 4 4z'/%3E%3C/svg%3E");
+}
+
+::-webkit-scrollbar-button:single-button:vertical:increment {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath fill='white' d='M2 4l4 4 4-4z'/%3E%3C/svg%3E");
+}
+
+::-webkit-scrollbar-button:single-button:vertical:decrement:hover,
+::-webkit-scrollbar-button:single-button:vertical:increment:hover {
+  background-color: #e86f00;
+  box-shadow: inset 0 0 0 1px #fff0c2, 0 0 4px #e86f00;
+}
+/* Contraste del texto del modal de términos y datos personales */
+#terminosModal .modal-content,
+#terminosModal .modal-body,
+#terminosModal .modal-body p,
+#terminosModal .modal-body h3,
+#terminosModal .modal-body strong,
+#terminosModal .modal-body span,
+#terminosModal .modal-body a {
+  color: #000000 !important;
+}
+
+#terminosModal .modal-body a {
+  text-decoration: underline;
 }

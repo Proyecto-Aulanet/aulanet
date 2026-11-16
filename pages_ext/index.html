@@ -4106,6 +4106,46 @@
 
     </footer>
 
+    <!-- BOTÓN FLOTANTE Y MODAL DE SUGERENCIAS -->
+    <button type="button" class="sugerencia-fab" data-bs-toggle="modal" data-bs-target="#modalSugerencia"
+        title="Enviar una sugerencia" aria-label="Enviar una sugerencia">?</button>
+
+    <div class="modal fade" id="modalSugerencia" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Sugerencias</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <p class="fw-semibold fs-5">¡Bienvenido! Este es el apartado de sugerencias.</p>
+                    <p>A continuación te dejamos nuestro medio de contacto:</p>
+                    <p class="mb-2">Gmail:</p>
+                    <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=aulanetoficialpue@gmail.com&amp;su=Sugerencia%20Aul%40Net"
+                        target="_blank" rel="noopener" class="btn btn-sugerencia-enviar rounded-pill px-4">
+                        <i class="bi bi-envelope-fill me-2"></i>aulanetoficialpue@gmail.com
+                    </a>
+                    <p class="small text-muted mt-3 mb-0">Al dar clic se abrirá Gmail para que nos escribas.</p>
+                    <hr class="my-4">
+                    <p class="mb-3">También puedes escribirnos por nuestras redes:</p>
+                    <div class="d-flex flex-wrap justify-content-center gap-2">
+                        <a href="https://www.facebook.com/profile.php?id=61589668907732" target="_blank" rel="noopener"
+                            class="btn btn-sugerencia-facebook rounded-pill px-4">
+                            <i class="bi bi-facebook me-2"></i>Facebook
+                        </a>
+                        <a href="https://www.instagram.com/nahuinetof/" target="_blank" rel="noopener"
+                            class="btn btn-sugerencia-instagram rounded-pill px-4">
+                            <i class="bi bi-instagram me-2"></i>Instagram
+                        </a>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
     <!-- BOOTSTRAP -->
