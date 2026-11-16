@@ -1,0 +1,37 @@
+# Configuración local y secretos
+.env
+.env.*
+!.env.example
+**/conexion.php
+**/*local-config*.php
+**/*secret*
+**/*credential*
+**/*credenciales*
+
+# Respaldos y volcados de bases de datos (pueden contener datos personales)
+*.sql
+*.sql.*
+*.dump
+*.bak
+*.backup
+*.sqlite
+*.sqlite3
+
+# Llaves privadas y certificados con material confidencial
+*.key
+*.pem
+*.p12
+*.pfx
+*.keystore
+
+# Registros y archivos temporales
+*.log
+*.tmp
+*.swp
+
+# Datos privados locales
+/documentos_privados/
+/private_data/
+/uploads/private/
+**/datos_personales/
+**/credenciales/
